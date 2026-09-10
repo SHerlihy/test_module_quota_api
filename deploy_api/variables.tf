@@ -20,9 +20,8 @@ variable "throttle" {
     })
 }
 
-variable "method_settings" {
-    type = list(object({
-      path = string
+variable "path_to_settings" {
+    type = map(object({
       burst_limit = number
       rate_limit = number
   }))
@@ -30,4 +29,8 @@ variable "method_settings" {
 
 variable "tags" {
   type        = map(string)
+}
+
+locals {
+  paths = toset([for key in var.path_to_settings : key])
 }

@@ -11,11 +11,10 @@ terraform {
     }
   }
 
-  backend "s3" {
-  }
+  backend "s3" {}
 }
 
 provider "aws" {
-  profile = "publisher_admin"
+  profile = "quota_endpoint_dev"
   region  = "eu-west-2"
 }

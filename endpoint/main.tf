@@ -23,7 +23,7 @@ resource "aws_lambda_permission" "api_gateway" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.handler.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${data.aws_api_gateway_rest_api.existing.execution_arn}/*/${var.http_method}/${var.route_path}"
+  source_arn    = "${var.execution_arn}/*/${var.http_method}/${var.route_path}"
 }
 
 data "archive_file" "handler" {

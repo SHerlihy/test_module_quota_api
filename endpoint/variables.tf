@@ -6,6 +6,10 @@ variable "root_resource_id"{
   type = string
 }
 
+variable "execution_arn" {
+  type = string
+}
+
 variable "route_path" {
   description = "Single path segment to add to the API, without a leading slash."
   type        = string

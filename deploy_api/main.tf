@@ -16,14 +16,14 @@ resource "aws_api_gateway_stage" "default" {
 }
 
 resource "aws_api_gateway_method_settings" "default" {
-  for_each = variable.method_settings
+  for_each = local.paths
   rest_api_id = var.api_id
   stage_name    = var.stage_name
-  method_path = each.path
+  method_path = each.value
 
   settings {
-    throttling_burst_limit = each.burst_limit
-    throttling_rate_limit  = each.rate_limit
+    throttling_burst_limit = var.path_to_settings[each.value].burst_limit
+    throttling_rate_limit  = var.path_to_settings[each.value].rate_limit
   }
 }
 
