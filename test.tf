@@ -9,6 +9,10 @@ locals {
 }
 
 module "draft_apis" {
+  providers = {
+    aws = aws.product_role
+  }
+
   for_each = local.api_names
   source   = "./draft_api"
 
@@ -27,6 +31,7 @@ locals {
     "${local.path_ids[0]}" : {
       api_id               = module.draft_apis[local.high_cost].api_id
       root_resource_id     = module.draft_apis[local.high_cost].root_resource_id
+      execution_arn        = module.draft_apis[local.high_cost].execution_arn
       route_path           = local.path_ids[0]
       http_method          = "GET"
       lambda_function_name = local.path_ids[0]
@@ -35,6 +40,7 @@ locals {
     "${local.path_ids[1]}" : {
       api_id               = module.draft_apis[local.high_cost].api_id
       root_resource_id     = module.draft_apis[local.high_cost].root_resource_id
+      execution_arn        = module.draft_apis[local.high_cost].execution_arn
       route_path           = local.path_ids[1]
       http_method          = "GET"
       lambda_function_name = local.path_ids[1]
@@ -43,6 +49,7 @@ locals {
     "${local.path_ids[2]}" : {
       api_id               = module.draft_apis[local.low_cost].api_id
       root_resource_id     = module.draft_apis[local.low_cost].root_resource_id
+      execution_arn        = module.draft_apis[local.low_cost].execution_arn
       route_path           = local.path_ids[2]
       http_method          = "POST"
       lambda_function_name = local.path_ids[2]
@@ -51,6 +58,7 @@ locals {
     "${local.path_ids[3]}" : {
       api_id               = module.draft_apis[local.low_cost].api_id
       root_resource_id     = module.draft_apis[local.low_cost].root_resource_id
+      execution_arn        = module.draft_apis[local.low_cost].execution_arn
       route_path           = local.path_ids[3]
       http_method          = "DELETE"
       lambda_function_name = local.path_ids[3]
@@ -61,6 +69,10 @@ locals {
 }
 
 module "dummy_paths" {
+  providers = {
+    aws = aws.test_role
+  }
+
   for_each = local.path_ids_set
   source   = "./endpoint"
 
@@ -79,19 +91,19 @@ locals {
       api_id : module.draft_apis[local.high_cost].api_id,
       stage_name : local.high_cost,
       quota : {
-        limit  = 100
-        period = "MONTH"
+        limit : 100
+        period : "MONTH"
       },
       throttle : {
         burst : 5,
         rate : 2
       },
       path_to_settings : {
-        "${local.path_ids[0]}" : {
+        "${local.path_ids[0]}/GET" : {
           burst_limit : 2
           rate_limit : 1
         },
-        "${local.path_ids[1]}" : {
+        "${local.path_ids[1]}/GET" : {
           burst_limit : 2
           rate_limit : 1
         },
@@ -109,11 +121,11 @@ locals {
         rate : 2
       },
       path_to_settings : {
-        "${local.path_ids[2]}" : {
+        "${local.path_ids[2]}/POST" : {
           burst_limit : 2
           rate_limit : 1
         },
-        "${local.path_ids[3]}" : {
+        "${local.path_ids[3]}/DELETE" : {
           burst_limit : 2
           rate_limit : 1
         },
@@ -123,15 +135,19 @@ locals {
 }
 
 module "deploy_apis" {
+  providers = {
+    aws = aws.product_role
+  }
+
   for_each = local.api_names
   source   = "./deploy_api"
 
-  api_id     = each.value.api_id
-  stage_name = each.value.stage_name
-  quota      = each.value.quota
-  throttle   = each.value.throttle
+  api_id     = local.deploy_config_apis[each.value].api_id
+  stage_name = local.deploy_config_apis[each.value].stage_name
+  quota      = local.deploy_config_apis[each.value].quota
+  throttle   = local.deploy_config_apis[each.value].throttle
 
-  path_to_settings = each.value.path_to_settings
+  path_to_settings = local.deploy_config_apis[each.value].path_to_settings
 
   tags = local.tags
 }

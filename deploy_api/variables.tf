@@ -32,5 +32,5 @@ variable "tags" {
 }
 
 locals {
-  paths = toset([for key in var.path_to_settings : key])
+  paths = toset([for key, value in var.path_to_settings : key])
 }
