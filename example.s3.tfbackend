@@ -1,0 +1,4 @@
+bucket = "publisher-backend-331505a6dfb1dab58d168e6f90"
+key    = "<your_username>/terraform.tfstate"
+profile = "<your_profile>"
+region = "eu-west-2"
