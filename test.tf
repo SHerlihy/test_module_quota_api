@@ -28,7 +28,7 @@ locals {
     "${local.low_cost}-delete",
   ]
   path_configs = {
-    "${local.path_ids[0]}" : {
+    (local.path_ids[0]) : {
       api_id               = module.draft_apis[local.high_cost].api_id
       root_resource_id     = module.draft_apis[local.high_cost].root_resource_id
       execution_arn        = module.draft_apis[local.high_cost].execution_arn
@@ -37,7 +37,7 @@ locals {
       lambda_function_name = local.path_ids[0]
       lambda_role_name     = local.path_ids[0]
     },
-    "${local.path_ids[1]}" : {
+    (local.path_ids[1]) : {
       api_id               = module.draft_apis[local.high_cost].api_id
       root_resource_id     = module.draft_apis[local.high_cost].root_resource_id
       execution_arn        = module.draft_apis[local.high_cost].execution_arn
@@ -46,7 +46,7 @@ locals {
       lambda_function_name = local.path_ids[1]
       lambda_role_name     = local.path_ids[1]
     },
-    "${local.path_ids[2]}" : {
+    (local.path_ids[2]) : {
       api_id               = module.draft_apis[local.low_cost].api_id
       root_resource_id     = module.draft_apis[local.low_cost].root_resource_id
       execution_arn        = module.draft_apis[local.low_cost].execution_arn
@@ -55,7 +55,7 @@ locals {
       lambda_function_name = local.path_ids[2]
       lambda_role_name     = local.path_ids[2]
     },
-    "${local.path_ids[3]}" : {
+    (local.path_ids[3]) : {
       api_id               = module.draft_apis[local.low_cost].api_id
       root_resource_id     = module.draft_apis[local.low_cost].root_resource_id
       execution_arn        = module.draft_apis[local.low_cost].execution_arn
@@ -87,7 +87,7 @@ module "dummy_paths" {
 
 locals {
   deploy_config_apis = {
-    "${local.high_cost}" : {
+    (local.high_cost) : {
       api_id : module.draft_apis[local.high_cost].api_id,
       stage_name : local.high_cost,
       quota : {
@@ -109,7 +109,7 @@ locals {
         },
       }
     },
-    "${local.low_cost}" : {
+    (local.low_cost) : {
       api_id : module.draft_apis[local.low_cost].api_id,
       stage_name : local.low_cost,
       quota : {

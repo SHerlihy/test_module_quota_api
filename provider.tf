@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.0, <2.0"
+  required_version = ">= 1.5, <2.0"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -20,9 +20,9 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "product_role"
+  alias   = "product_role"
   profile = "quota_endpoint_dev"
-  region = "eu-west-2"
+  region  = "eu-west-2"
 
   assume_role {
     role_arn = "arn:aws:iam::160669536848:role/quota-endpoint-api-gateway"
@@ -30,9 +30,9 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "test_role"
+  alias   = "test_role"
   profile = "quota_endpoint_dev"
-  region = "eu-west-2"
+  region  = "eu-west-2"
 
   assume_role {
     role_arn = "arn:aws:iam::160669536848:role/test-api-gateway"
