@@ -44,6 +44,7 @@ data "terraform_remote_state" "pre_deploy" {
   config = {
     bucket = var.tf_state_bucket
     region = var.tf_state_region
-    key    = "pre_deploy/terraform.tfstate"
+    profile = var.tf_state_profile
+key    = "steve/pre_deploy/terraform.tfstate"
   }
 }
