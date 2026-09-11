@@ -9,7 +9,9 @@
   ```./create_branch.sh <branch-name>```
 
 - Carry out dev work
-- Push work to dev branches manually per submodule
+
+- Push work using:
+  ```./push_changes.sh```
 
 - Rebase main branches as needed:
   ```git pull --rebase --recurse-submodules origin main```
