@@ -95,8 +95,8 @@ locals {
         period : "MONTH"
       },
       throttle : {
-        burst : 5,
-        rate : 2
+        burst : 2,
+        rate : 1
       },
       path_to_settings : {
         "${local.path_ids[0]}/GET" : {
