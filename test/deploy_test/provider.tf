@@ -42,9 +42,9 @@ provider "aws" {
 data "terraform_remote_state" "pre_deploy" {
   backend = "s3"
   config = {
-    bucket = var.tf_state_bucket
-    region = var.tf_state_region
+    bucket  = var.tf_state_bucket
+    region  = var.tf_state_region
     profile = var.tf_state_profile
-key    = "steve/pre_deploy/terraform.tfstate"
+    key     = "steve/pre_deploy/terraform.tfstate"
   }
 }

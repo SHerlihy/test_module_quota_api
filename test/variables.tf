@@ -1,5 +1,5 @@
-  variable "profile" {
-    type     = string
-    default  = null
-    nullable = true
-  }
+variable "profile" {
+  type     = string
+  default  = null
+  nullable = true
+}
