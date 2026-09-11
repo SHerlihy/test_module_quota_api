@@ -23,3 +23,5 @@ terraform.rc
 
 *.tfbackend
 !example.*.tfbackend
+
+dev.auto.tfvars

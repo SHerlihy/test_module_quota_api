@@ -15,13 +15,13 @@ terraform {
 }
 
 provider "aws" {
-  profile = "quota_endpoint_dev"
+  profile = var.profile
   region  = "eu-west-2"
 }
 
 provider "aws" {
   alias   = "product_role"
-  profile = "quota_endpoint_dev"
+  profile = var.profile
   region  = "eu-west-2"
 
   assume_role {
@@ -31,7 +31,7 @@ provider "aws" {
 
 provider "aws" {
   alias   = "test_role"
-  profile = "quota_endpoint_dev"
+  profile = var.profile
   region  = "eu-west-2"
 
   assume_role {
