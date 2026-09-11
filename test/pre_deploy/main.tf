@@ -14,7 +14,7 @@ module "draft_apis" {
   }
 
   for_each = local.api_names
-  source   = "./draft_api"
+  source   = "../../draft_api"
 
   api_name = each.value
   tags     = local.tags
@@ -74,7 +74,7 @@ module "dummy_paths" {
   }
 
   for_each = local.path_ids_set
-  source   = "./endpoint"
+  source   = "../../endpoint"
 
   api_id               = local.path_configs[each.value].api_id
   root_resource_id     = local.path_configs[each.value].root_resource_id
@@ -132,29 +132,4 @@ locals {
       }
     }
   }
-}
-
-module "deploy_apis" {
-  providers = {
-    aws = aws.product_role
-  }
-
-  for_each = local.api_names
-  source   = "./deploy_api"
-
-  api_id     = local.deploy_config_apis[each.value].api_id
-  stage_name = local.deploy_config_apis[each.value].stage_name
-  quota      = local.deploy_config_apis[each.value].quota
-  throttle   = local.deploy_config_apis[each.value].throttle
-
-  path_to_settings = local.deploy_config_apis[each.value].path_to_settings
-
-  tags = local.tags
-}
-
-output "api_name_to_access" {
-  value = { for api_name in local.api_names : api_name => {
-    endpoint : module.deploy_apis[api_name].endpoint,
-    api_key : module.deploy_apis[api_name].api_key
-  } }
 }
