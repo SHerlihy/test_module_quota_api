@@ -64,7 +64,6 @@ jobs:
       run: terraform plan -no-color
 
     - name: Terraform Apply
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       working-directory: test
       run: terraform apply -auto-approve -no-color
 
@@ -73,15 +72,17 @@ jobs:
       working-directory: test
       run: terraform destroy -auto-approve -no-color
 
+    - name: Terraform Destroy before Submodule Update
+      working-directory: test
+      run: terraform destroy -auto-approve -no-color
+
     - name: Publish draft api
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       working-directory: draft_api
       run: |
         git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@github.com/SHerlihy/terraform-aws-draft-cors-api.git"
         git push origin HEAD:main
 
     - name: Publish deploy api
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       working-directory: deploy_api
       run: |
         git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@github.com/SHerlihy/terraform-aws-deploy-api-public-quota.git"
