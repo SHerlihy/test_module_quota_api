@@ -2,7 +2,7 @@ variable "api_id" {
   type = string
 }
 
-variable "root_resource_id"{
+variable "root_resource_id" {
   type = string
 }
 
@@ -41,5 +41,5 @@ variable "lambda_role_name" {
 }
 
 variable "tags" {
-  type        = map(string)
+  type = map(string)
 }

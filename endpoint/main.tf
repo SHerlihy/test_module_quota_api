@@ -19,7 +19,7 @@ resource "aws_api_gateway_resource" "route" {
 }
 
 resource "aws_api_gateway_method" "route" {
-  rest_api_id = var.api_id
+  rest_api_id   = var.api_id
   resource_id   = aws_api_gateway_resource.route.id
   http_method   = var.http_method
   authorization = "NONE"
@@ -47,7 +47,7 @@ data "aws_iam_policy_document" "lambda_assume_role" {
 resource "aws_iam_role" "lambda" {
   name               = var.lambda_role_name
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  tags = var.tags
+  tags               = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
@@ -64,7 +64,7 @@ resource "aws_lambda_function" "handler" {
   runtime          = "nodejs20.x"
   timeout          = 10
   memory_size      = 128
-  tags = var.tags
+  tags             = var.tags
 }
 
 resource "aws_lambda_permission" "api_gateway" {
@@ -76,7 +76,7 @@ resource "aws_lambda_permission" "api_gateway" {
 }
 
 resource "aws_api_gateway_integration" "route" {
-  rest_api_id = var.api_id
+  rest_api_id             = var.api_id
   resource_id             = aws_api_gateway_resource.route.id
   http_method             = aws_api_gateway_method.route.http_method
   integration_http_method = "POST"
