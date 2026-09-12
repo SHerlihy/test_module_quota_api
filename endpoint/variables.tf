@@ -39,3 +39,7 @@ variable "lambda_role_name" {
   description = "Name of the IAM role created for Lambda."
   type        = string
 }
+
+variable "tags" {
+  type        = map(string)
+}

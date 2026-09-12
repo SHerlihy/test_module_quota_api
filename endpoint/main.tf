@@ -12,13 +12,6 @@ terraform {
   }
 }
 
-locals {
-  tags = {
-    product_id = "quota endpoint"
-    facet = "admin"
-  }
-}
-
 resource "aws_api_gateway_resource" "route" {
   rest_api_id = var.api_id
   parent_id   = var.root_resource_id
@@ -30,14 +23,6 @@ resource "aws_api_gateway_method" "route" {
   resource_id   = aws_api_gateway_resource.route.id
   http_method   = var.http_method
   authorization = "NONE"
-}
-
-resource "aws_lambda_permission" "api_gateway" {
-  statement_id  = "AllowExecutionFromApiGateway-${var.route_path}"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.handler.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${var.execution_arn}/*/${var.http_method}/${var.route_path}"
 }
 
 data "archive_file" "handler" {
@@ -62,7 +47,7 @@ data "aws_iam_policy_document" "lambda_assume_role" {
 resource "aws_iam_role" "lambda" {
   name               = var.lambda_role_name
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-  tags = local.tags
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
@@ -79,7 +64,15 @@ resource "aws_lambda_function" "handler" {
   runtime          = "nodejs20.x"
   timeout          = 10
   memory_size      = 128
-  tags = local.tags
+  tags = var.tags
+}
+
+resource "aws_lambda_permission" "api_gateway" {
+  statement_id  = "AllowExecutionFromApiGateway-${var.route_path}"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.handler.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${var.execution_arn}/*/${var.http_method}/${var.route_path}"
 }
 
 resource "aws_api_gateway_integration" "route" {
