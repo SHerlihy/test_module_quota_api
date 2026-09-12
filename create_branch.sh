@@ -4,3 +4,6 @@
 
 git switch -c $1
 git submodule foreach 'git switch -c '"$1"
+
+git submodule foreach 'git commit --allow-empty -m "trigger: pipeline run"'
+git commit --allow-empty -m "trigger: pipeline run"
