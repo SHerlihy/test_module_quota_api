@@ -1,8 +1,4 @@
 locals {
-  tags = {
-    product_id = "quota endpoint"
-    facet      = "admin"
-  }
   high_cost = "highCost"
   low_cost  = "lowCost"
   api_names = toset([local.high_cost, local.low_cost])
@@ -17,7 +13,7 @@ module "draft_apis" {
   source   = "../draft_api"
 
   api_name = each.value
-  tags     = local.tags
+  tags     = var.tags
 }
 
 locals {
@@ -83,6 +79,8 @@ module "dummy_paths" {
   http_method          = local.path_configs[each.value].http_method
   lambda_function_name = local.path_configs[each.value].lambda_function_name
   lambda_role_name     = local.path_configs[each.value].lambda_role_name
+
+  tags = var.tags
 }
 
 locals {
@@ -149,5 +147,5 @@ module "deploy_apis" {
 
   path_to_settings = local.deploy_config_apis[each.value].path_to_settings
 
-  tags = local.tags
+  tags = var.tags
 }

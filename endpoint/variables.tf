@@ -2,7 +2,7 @@ variable "api_id" {
   type = string
 }
 
-variable "root_resource_id"{
+variable "root_resource_id" {
   type = string
 }
 
@@ -38,4 +38,8 @@ variable "lambda_function_name" {
 variable "lambda_role_name" {
   description = "Name of the IAM role created for Lambda."
   type        = string
+}
+
+variable "tags" {
+  type = map(string)
 }
