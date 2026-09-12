@@ -65,7 +65,7 @@ jobs:
 
     - name: Terraform Apply
       working-directory: test
-      run: terraform apply -auto-approve -no-color
+      run: terraform apply -auto-approve -no-color -var='tags={product_id="quota endpoint", facet="cicd"}'
 
     - name: Terraform Destroy on Failure
       if: failure()
