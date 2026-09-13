@@ -10,7 +10,7 @@ module "draft_apis" {
   }
 
   for_each = local.api_names
-  source   = "../draft_api"
+  source   = "../terraform-aws-draft-cors-api"
 
   api_name = each.value
   tags     = var.tags
@@ -138,7 +138,7 @@ module "deploy_apis" {
   }
 
   for_each = local.api_names
-  source   = "../deploy_api"
+  source   = "../terraform-aws-deploy-api-public-quota"
 
   api_id     = local.deploy_config_apis[each.value].api_id
   stage_name = local.deploy_config_apis[each.value].stage_name

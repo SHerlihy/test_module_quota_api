@@ -1,6 +1,6 @@
 [submodule "deploy_api"]
-	path = deploy_api
+	path = terraform-aws-deploy-api-public-quota
   url = https://github.com/SHerlihy/terraform-aws-deploy-api-public-quota.git
 [submodule "draft_api"]
-	path = draft_api
+	path = terraform-aws-draft-cors-api
   url = https://github.com/SHerlihy/terraform-aws-draft-cors-api.git
