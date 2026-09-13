@@ -40,7 +40,7 @@ jobs:
         git switch --detach "origin/$BRANCH_NAME"
 
     - name: Switch deploy api to branch
-      working-directory: deploy_api
+      working-directory: terraform-aws-deploy-api-public-quota
       run: |
         git fetch origin "$BRANCH_NAME"
         git switch --detach "origin/$BRANCH_NAME"
@@ -94,7 +94,7 @@ jobs:
         git push origin HEAD:main
 
     - name: Publish deploy api
-      working-directory: deploy_api
+      working-directory: terraform-aws-deploy-api-public-quota
       run: |
         git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@${DEPLOY_REPO}"
         git push origin HEAD:main
