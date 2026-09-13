@@ -15,6 +15,8 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       SUBMODULE_PUSH_TOKEN: ${{ secrets.SUBMODULE_PUSH_TOKEN }}
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      DRAFT_REPO: "github.com/SHerlihy/terraform-aws-draft-cors-api.git"
+      DEPLOY_REPO: "github.com/SHerlihy/terraform-aws-deploy-api-public-quota.git"
     steps:
     - name: Checkout Parent Repository
       uses: actions/checkout@v4
@@ -79,11 +81,11 @@ jobs:
     - name: Publish draft api
       working-directory: draft_api
       run: |
-        git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@github.com/SHerlihy/terraform-aws-draft-cors-api.git"
+        git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@${DRAFT_REPO}"
         git push origin HEAD:main
 
     - name: Publish deploy api
       working-directory: deploy_api
       run: |
-        git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@github.com/SHerlihy/terraform-aws-deploy-api-public-quota.git"
+        git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@${DEPLOY_REPO}"
         git push origin HEAD:main
