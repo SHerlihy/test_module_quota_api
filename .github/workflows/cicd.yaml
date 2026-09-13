@@ -19,79 +19,78 @@ jobs:
     - name: Checkout Parent Repository
       uses: actions/checkout@v4
       with:
-        submodules: 'true'
+        submodules: false
         fetch-depth: 0
 
-    - name: Check token identity
+    - name: Checkout submodules
       env:
         GH_TOKEN: ${{ secrets.SUBMODULE_PUSH_TOKEN }}
       run: |
-        curl --fail-with-body \
-          -H "Authorization: Bearer ${GH_TOKEN}" \
-          https://api.github.com/user
+        git config --global url."https://x-access-token:${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
+        git submodule update --init --recursive
 
-    # - name: Switch draft api to branch
-    #   working-directory: draft_api
-    #   run: |
-    #     git fetch origin "$BRANCH_NAME"
-    #     git switch --detach "origin/$BRANCH_NAME"
-    #
-    # - name: Switch deploy api to branch
-    #   working-directory: deploy_api
-    #   run: |
-    #     git fetch origin "$BRANCH_NAME"
-    #     git switch --detach "origin/$BRANCH_NAME"
-    #
-    # - name: Setup Terraform with specified version on the runner
-    #   uses: hashicorp/setup-terraform@v4
-    #   with:
-    #     terraform_version: 1.9.0
-    #
-    # - name: Terraform format
-    #   id: fmt
-    #   working-directory: test
-    #   run: terraform fmt -check -recursive
-    #
-    # - name: Terraform init
-    #   id: init
-    #   working-directory: test
-    #   run: |
-    #     terraform init \
-    #       -backend-config="bucket=publisher-backend-66885bbaacdaa619638d156d3d" \
-    #       -backend-config="key=cicd/terraform.tfstate" \
-    #       -backend-config="region=eu-west-2"
-    #
-    # - name: Terraform validate
-    #   id: validate
-    #   working-directory: test
-    #   run: terraform validate -no-color
-    #
-    # - name: Terraform Plan
-    #   id: plan
-    #   working-directory: test
-    #   run: terraform plan -no-color -var="$VARS"
-    #
-    # - name: Terraform Apply
-    #   working-directory: test
-    #   run: terraform apply -auto-approve -no-color -var="$VARS"
-    #
-    # - name: Terraform Destroy on Failure
-    #   if: failure()
-    #   working-directory: test
-    #   run: terraform destroy -auto-approve -no-color -var="$VARS"
-    #
-    # - name: Terraform Destroy before Submodule Update
-    #   working-directory: test
-    #   run: terraform destroy -auto-approve -no-color -var="$VARS"
-    #
-    # - name: Publish draft api
-    #   working-directory: draft_api
-    #   run: |
-    #     git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@${DRAFT_REPO}"
-    #     git push origin HEAD:main
-    #
-    # - name: Publish deploy api
-    #   working-directory: deploy_api
-    #   run: |
-    #     git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@${DEPLOY_REPO}"
-    #     git push origin HEAD:main
+    - name: Switch draft api to branch
+      working-directory: draft_api
+      run: |
+        git fetch origin "$BRANCH_NAME"
+        git switch --detach "origin/$BRANCH_NAME"
+
+    - name: Switch deploy api to branch
+      working-directory: deploy_api
+      run: |
+        git fetch origin "$BRANCH_NAME"
+        git switch --detach "origin/$BRANCH_NAME"
+
+    - name: Setup Terraform with specified version on the runner
+      uses: hashicorp/setup-terraform@v4
+      with:
+        terraform_version: 1.9.0
+
+    - name: Terraform format
+      id: fmt
+      working-directory: test
+      run: terraform fmt -check -recursive
+
+    - name: Terraform init
+      id: init
+      working-directory: test
+      run: |
+        terraform init \
+          -backend-config="bucket=publisher-backend-66885bbaacdaa619638d156d3d" \
+          -backend-config="key=cicd/terraform.tfstate" \
+          -backend-config="region=eu-west-2"
+
+    - name: Terraform validate
+      id: validate
+      working-directory: test
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      id: plan
+      working-directory: test
+      run: terraform plan -no-color -var="$VARS"
+
+    - name: Terraform Apply
+      working-directory: test
+      run: terraform apply -auto-approve -no-color -var="$VARS"
+
+    - name: Terraform Destroy on Failure
+      if: failure()
+      working-directory: test
+      run: terraform destroy -auto-approve -no-color -var="$VARS"
+
+    - name: Terraform Destroy before Submodule Update
+      working-directory: test
+      run: terraform destroy -auto-approve -no-color -var="$VARS"
+
+    - name: Publish draft api
+      working-directory: draft_api
+      run: |
+        git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@${DRAFT_REPO}"
+        git push origin HEAD:main
+
+    - name: Publish deploy api
+      working-directory: deploy_api
+      run: |
+        git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@${DEPLOY_REPO}"
+        git push origin HEAD:main
