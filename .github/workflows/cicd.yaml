@@ -34,7 +34,7 @@ jobs:
         git submodule update --init --recursive
 
     - name: Switch draft api to branch
-      working-directory: draft_api
+      working-directory: terraform-aws-draft-cors-api
       run: |
         git fetch origin "$BRANCH_NAME"
         git switch --detach "origin/$BRANCH_NAME"
@@ -88,7 +88,7 @@ jobs:
       run: terraform destroy -auto-approve -no-color -var="$VARS"
 
     - name: Publish draft api
-      working-directory: draft_api
+      working-directory: terraform-aws-draft-cors-api
       run: |
         git remote set-url origin "https://x-access-token:${SUBMODULE_PUSH_TOKEN}@${DRAFT_REPO}"
         git push origin HEAD:main

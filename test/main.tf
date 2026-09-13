@@ -10,7 +10,7 @@ module "draft_apis" {
   }
 
   for_each = local.api_names
-  source   = "../draft_api"
+  source   = "../terraform-aws-draft-cors-api"
 
   api_name = each.value
   tags     = var.tags
