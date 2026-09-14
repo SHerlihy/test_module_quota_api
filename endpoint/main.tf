@@ -12,6 +12,7 @@ terraform {
   }
 }
 
+
 resource "aws_api_gateway_resource" "route" {
   rest_api_id = var.api_id
   parent_id   = var.root_resource_id
@@ -83,3 +84,24 @@ resource "aws_api_gateway_integration" "route" {
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.handler.invoke_arn
 }
+
+# Handles all normal HTTP methods through the backend.
+resource "aws_api_gateway_method" "proxy" {
+  rest_api_id = var.api_id
+    resource_id = var.proxy_id
+  http_method   = var.http_method
+  authorization = "NONE"
+}
+
+data "aws_region" "current" {}
+
+  resource "aws_api_gateway_integration" "proxy" {
+  rest_api_id = var.api_id
+    resource_id = var.proxy_id
+    http_method = aws_api_gateway_method.proxy.http_method
+
+    integration_http_method = "POST"
+    type                    = "AWS_PROXY"
+
+    uri = "arn:aws:apigateway:${data.aws_region.current.region}:lambda:path/2015-03-31/functions/${aws_lambda_function.handler.arn}/invocations"
+  }

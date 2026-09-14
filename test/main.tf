@@ -32,6 +32,8 @@ locals {
       http_method          = "GET"
       lambda_function_name = local.path_ids[0]
       lambda_role_name     = local.path_ids[0]
+      proxy_id             = module.draft_apis[local.high_cost].proxy_id
+      proxy_method         = module.draft_apis[local.high_cost].proxy_method
     },
     (local.path_ids[1]) : {
       api_id               = module.draft_apis[local.high_cost].api_id
@@ -41,6 +43,8 @@ locals {
       http_method          = "GET"
       lambda_function_name = local.path_ids[1]
       lambda_role_name     = local.path_ids[1]
+      proxy_id             = module.draft_apis[local.high_cost].proxy_id
+      proxy_method         = module.draft_apis[local.high_cost].proxy_method
     },
     (local.path_ids[2]) : {
       api_id               = module.draft_apis[local.low_cost].api_id
@@ -50,6 +54,8 @@ locals {
       http_method          = "POST"
       lambda_function_name = local.path_ids[2]
       lambda_role_name     = local.path_ids[2]
+      proxy_id             = module.draft_apis[local.low_cost].proxy_id
+      proxy_method         = module.draft_apis[local.low_cost].proxy_method
     },
     (local.path_ids[3]) : {
       api_id               = module.draft_apis[local.low_cost].api_id
@@ -59,6 +65,8 @@ locals {
       http_method          = "DELETE"
       lambda_function_name = local.path_ids[3]
       lambda_role_name     = local.path_ids[3]
+      proxy_id             = module.draft_apis[local.low_cost].proxy_id
+      proxy_method         = module.draft_apis[local.low_cost].proxy_method
     },
   }
   path_ids_set = toset(local.path_ids)
@@ -79,6 +87,8 @@ module "dummy_paths" {
   http_method          = local.path_configs[each.value].http_method
   lambda_function_name = local.path_configs[each.value].lambda_function_name
   lambda_role_name     = local.path_configs[each.value].lambda_role_name
+  proxy_id             = local.path_configs[each.value].proxy_id
+  proxy_method         = local.path_configs[each.value].proxy_method
 
   tags = var.tags
 }

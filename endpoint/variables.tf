@@ -10,6 +10,10 @@ variable "execution_arn" {
   type = string
 }
 
+variable "proxy_id" {
+  type = string
+}
+
 variable "route_path" {
   description = "Single path segment to add to the API, without a leading slash."
   type        = string
