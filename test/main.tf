@@ -25,6 +25,7 @@ locals {
   ]
   path_configs = {
     (local.path_ids[0]) : {
+      api_name             = local.high_cost
       api_id               = module.draft_apis[local.high_cost].api_id
       root_resource_id     = module.draft_apis[local.high_cost].root_resource_id
       execution_arn        = module.draft_apis[local.high_cost].execution_arn
@@ -32,8 +33,13 @@ locals {
       http_method          = "GET"
       lambda_function_name = local.path_ids[0]
       lambda_role_name     = local.path_ids[0]
+      limits : {
+        burst_limit : 2
+        rate_limit : 1
+      }
     },
     (local.path_ids[1]) : {
+      api_name             = local.high_cost
       api_id               = module.draft_apis[local.high_cost].api_id
       root_resource_id     = module.draft_apis[local.high_cost].root_resource_id
       execution_arn        = module.draft_apis[local.high_cost].execution_arn
@@ -41,8 +47,13 @@ locals {
       http_method          = "GET"
       lambda_function_name = local.path_ids[1]
       lambda_role_name     = local.path_ids[1]
+      limits : {
+        burst_limit : 2
+        rate_limit : 1
+      }
     },
     (local.path_ids[2]) : {
+      api_name             = local.low_cost
       api_id               = module.draft_apis[local.low_cost].api_id
       root_resource_id     = module.draft_apis[local.low_cost].root_resource_id
       execution_arn        = module.draft_apis[local.low_cost].execution_arn
@@ -50,8 +61,13 @@ locals {
       http_method          = "POST"
       lambda_function_name = local.path_ids[2]
       lambda_role_name     = local.path_ids[2]
+      limits : {
+        burst_limit : 2
+        rate_limit : 1
+      }
     },
     (local.path_ids[3]) : {
+      api_name             = local.low_cost
       api_id               = module.draft_apis[local.low_cost].api_id
       root_resource_id     = module.draft_apis[local.low_cost].root_resource_id
       execution_arn        = module.draft_apis[local.low_cost].execution_arn
@@ -59,6 +75,10 @@ locals {
       http_method          = "DELETE"
       lambda_function_name = local.path_ids[3]
       lambda_role_name     = local.path_ids[3]
+      limits : {
+        burst_limit : 2
+        rate_limit : 1
+      }
     },
   }
   path_ids_set = toset(local.path_ids)
@@ -97,15 +117,9 @@ locals {
         rate : 2
       },
       path_to_settings : {
-        "${local.path_ids[0]}/GET" : {
-          burst_limit : 2
-          rate_limit : 1
-        },
-        "${local.path_ids[1]}/GET" : {
-          burst_limit : 2
-          rate_limit : 1
-        },
-      }
+        "${local.path_ids[0]}/GET" : local.path_configs[local.path_ids[0]].limits,
+        "${local.path_ids[1]}/GET" : local.path_configs[local.path_ids[1]].limits,
+      },
     },
     (local.low_cost) : {
       api_id : module.draft_apis[local.low_cost].api_id,
@@ -119,20 +133,15 @@ locals {
         rate : 2
       },
       path_to_settings : {
-        "${local.path_ids[2]}/POST" : {
-          burst_limit : 2
-          rate_limit : 1
-        },
-        "${local.path_ids[3]}/DELETE" : {
-          burst_limit : 2
-          rate_limit : 1
-        },
+        "${local.path_ids[2]}/POST" : local.path_configs[local.path_ids[2]].limits,
+        "${local.path_ids[3]}/DELETE" : local.path_configs[local.path_ids[3]].limits,
       }
     }
   }
 }
 
 module "deploy_apis" {
+  depends_on = [module.dummy_paths]
   providers = {
     aws = aws.product_role
   }

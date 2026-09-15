@@ -19,10 +19,11 @@ resource "aws_api_gateway_resource" "route" {
 }
 
 resource "aws_api_gateway_method" "route" {
-  rest_api_id   = var.api_id
-  resource_id   = aws_api_gateway_resource.route.id
-  http_method   = var.http_method
-  authorization = "NONE"
+  rest_api_id      = var.api_id
+  resource_id      = aws_api_gateway_resource.route.id
+  http_method      = var.http_method
+  authorization    = "NONE"
+  api_key_required = true
 }
 
 data "archive_file" "handler" {
